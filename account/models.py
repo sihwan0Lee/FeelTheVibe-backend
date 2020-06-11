@@ -3,6 +3,7 @@ from music.models import Music, Artist, Album
 
 class User(models.Model):
     name        = models.CharField(max_length = 50)
+    nickname    = models.CharField(max_length = 50)
     email       = models.EmailField(max_length = 200)
     giftcard    = models.ForeignKey('Giftcard', on_delete = models.SET_NULL, null = True)
     artist      = models.ManyToManyField(Artist, through = 'MyFavoriteArtist')
