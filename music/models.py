@@ -13,13 +13,15 @@ class Album(models.Model):
 class Music(models.Model):
     name        = models.CharField(max_length = 50)
     album       = models.ForeignKey('Album', on_delete = models.SET_NULL, null = True)
-    genre       = models.ForeignKey('Genre', on_delete = models.SET_NULL, null = True)
     sound       = models.URLField(max_length = 2000)
     playtime    = models.TimeField(null = True)
     play_count  = models.IntegerField(null = True, default = 0)
     lyrics      = models.TextField()
     is_title    = models.BooleanField()
-
+    artist      = models.ManyToManyField('Artist', through = 'MusicArtist')
+    staff       = models.ManyToManyField('Staff', through = 'MusicStaff')
+    myplaylist  = models.ManyToManyField('account.MyPlaylist', through = 'MyPlaylistMusic')
+    
     class Meta:
         db_table = 'music'
 
@@ -33,7 +35,8 @@ class Artist(models.Model):
     name        = models.CharField(max_length = 50)
     debut_date  = models.DateField(null = True)
     image_url   = models.URLField(max_length = 2000)
-
+    genre       = models.ManyToManyField('Genre',through = 'ArtistGenre')
+    
     class Meta:
         db_table = 'artists'
 
@@ -56,7 +59,7 @@ class MyplaylistMusic(models.Model):
     music       = models.ForeignKey('Music', on_delete = models.CASCADE)
 
     class Meta:
-        db_table = 'myplaylist_musics'
+        db_table = 'myplaylist_music'
 
 class Theme(models.Model):
     name        = models.CharField(max_length = 50)
