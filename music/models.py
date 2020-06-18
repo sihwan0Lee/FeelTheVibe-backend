@@ -38,14 +38,14 @@ class Artist(models.Model):
     debut_date  = models.CharField(max_length = 50, null = True)
     image_url   = models.URLField(max_length = 2000)
     genre       = models.ManyToManyField('Genre',through = 'ArtistGenre')
-    
+
     class Meta:
         db_table = 'artists'
 
 class ArtistGenre(models.Model):
     artist      = models.ForeignKey('Artist', on_delete = models.CASCADE)
     genre       = models.ForeignKey('Genre', on_delete = models.CASCADE)
-    
+
     class Meta:
         db_table = 'artist_genres'
 
@@ -65,7 +65,7 @@ class MyplaylistMusic(models.Model):
 
 class Theme(models.Model):
     name        = models.CharField(max_length = 50)
-
+    image_url   = models.URLField(max_length = 2000)
     class Meta:
         db_table = 'themes'
 

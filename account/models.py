@@ -5,6 +5,7 @@ class User(models.Model):
     name        = models.CharField(max_length = 50)
     nickname    = models.CharField(max_length = 50)
     email       = models.EmailField(max_length = 200)
+    nickname    = models.CharField(max_length=200, null=True)
     giftcard    = models.ForeignKey('Giftcard', on_delete = models.SET_NULL, null = True)
     artist      = models.ManyToManyField(Artist, through = 'MyFavoriteArtist')
     music       = models.ManyToManyField(Music, through = 'MyFavoriteMusic')
@@ -18,7 +19,7 @@ class MyPlaylist(models.Model):
     name        = models.CharField(max_length = 50)
     created_at  = models.DateTimeField(auto_now_add = True)
     user        = models.ForeignKey('User', on_delete = models.CASCADE)
-    
+    quantity    = models.IntegerField() 
     class Meta:
         db_table = 'myplaylists'
 
