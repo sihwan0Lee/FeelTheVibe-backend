@@ -15,6 +15,7 @@ import my_settings
 
 SECRET_KEY = my_settings.SECRET_KEY['SECRET_KEY']
 DATABASES = my_settings.DATABASES
+HASH = my_settings.HASH['ALG']
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheader.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
