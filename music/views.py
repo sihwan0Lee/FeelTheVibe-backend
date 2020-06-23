@@ -113,7 +113,7 @@ class MyPlaylistView(View):
         user = request.user
         try:
             if MyPlaylist.objects.filter(user = user).exists():
-                myplaylists = MyPlaylist.objects.all()
+                myplaylists = MyPlaylist.objects.filter(user = user)[1:]
                 play_list = [{
                     'myplaylist_id': myplaylist.id,
                     'name'         : myplaylist.name,
@@ -192,6 +192,33 @@ class MusicDeleteView(view):
                 MyplaylistMusic.objects.get(myplaylist_id = myplaylist_id, music_id = data['music_id']).delete()
                 return HttpResponse(status = 200)
             return JsonResponse({ 'message' : 'INVALID_VALUES' }, status = 400)
+
+        except KeyError:
+            return JsonResponse({ 'message' : 'INVALID_KEYS' }, status = 400)
+
+class PlayerView(View):
+    @login_decorator
+    def get(self,request):
+        try:
+            user = request.user
+            player = MyPlaylist.objects.filter(user = user).first()
+            songs = MyplaylistMusic.objects.filter(myplaylist = player)
+            player_list = []
+            for song in songs:
+                artist = []
+                music_artists = song.music.musicartist_set.all()
+                for music_artist in music_artists:
+                    artist.append(music_artist.artist.name)
+                data = {
+                'id'        : song.music.id,
+                'title'     : song.music.name,
+                'urlLarge'  : song.music.album.image_url.replace('120','720'),
+                'urlSmall'  : song.music.album.image_url.replace('120','100'),
+                'album'     : song.music.album.name,
+                'artist'    : artist,
+                'lyrics'    : song.music.lyrics}
+                player_list.append(data)
+            return JsonResponse({ 'data' : player_list },status = 200)
 
         except KeyError:
             return JsonResponse({ 'message' : 'INVALID_KEYS' }, status = 400)
