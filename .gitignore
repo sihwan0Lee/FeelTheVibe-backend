@@ -185,4 +185,7 @@ tags
 # Persistent undo
 [._]*.un~
 my_settings.py
+vibemusic
+backup1.sql
+db_uploader.py
 # End of https://www.toptal.com/developers/gitignore/api/osx,vim,python
