@@ -3,7 +3,7 @@ import  json
 from django.views import View
 from django.http import HttpResponse, JsonResponse, StreamingHttpResponse
 
-from .models import Music, Album, Artist, Genre, MyplaylistMusic, ArtistGenre
+from .models import Music, Album, Artist, Genre, MyplaylistMusic, ArtistGenre, MusicArtist
 from account.models import User, MyPlaylist, MyFavoriteMusic
 from account.utils import login_decorator
 
@@ -100,10 +100,10 @@ class MyPlaylistView(View):
                 MyPlaylist.objects.create(
                     user_id = user.id,
                     name = data['name'],
-                    quantity = data['quantity']
+                    quantity = 0
                 )
                 return HttpResponse(status = 200)
-            return JsonResponse({ 'message' : 'INVALID_TOKEN_OR_INVALID_NAME' }, status =400)
+            return JsonResponse({ 'message' : 'INVALID_TOKEN_OR_INVALID_NAME' }, status =300)
         
         except KeyError:
             return JsonResponse({ 'message' : 'INAVLID_KEYS' },status =400)
@@ -119,8 +119,8 @@ class MyPlaylistView(View):
                     'name'         : myplaylist.name,
                     'quantity'     : myplaylist.quantity,
                     'created_at'   : myplaylist.created_at
-                }for myplaylist in myplaylsits]
-                return HttpResponse(status =200)
+                }for myplaylist in myplaylists]
+                return JsonResponse({ 'data' : play_list },status =200)
             return JsonResponse({ 'message': 'INVALID_USER'}, status = 400)
 
         except KeyError:
@@ -182,7 +182,7 @@ class MusicAddView(View):
         except KeyError:
             return JsonResponse({ 'message' : 'INVALID_KEYS' }, status = 400)
 
-class MusicDeleteView(view):
+class MusicDeleteView(View):
     @login_decorator
     def delete(self,request,myplaylist_id):
         try:
@@ -218,8 +218,31 @@ class PlayerView(View):
                 'artist'    : artist,
                 'lyrics'    : song.music.lyrics}
                 player_list.append(data)
-            return JsonResponse({ 'data' : player_list },status = 200)
+            return JsonResponse({ 'data' : player_list, 'myplaylist_id' : player.id },status = 200)
 
         except KeyError:
             return JsonResponse({ 'message' : 'INVALID_KEYS' }, status = 400)
+
+class balladChartView(View):
+    def get(self,request):
+        try:
+            ballad_artists = ArtistGenre.objects.filter(genre_id =1)
+            ballad_list = []
+            for ballad_artist in ballad_artists:
+                songs = MusicArtist.objects.filter(artist_id = ballad_artist.artist.id)
+                for song in songs:
+                    ballad = {
+                        'music_id'  : song.music.id,
+                        'music_name': song.music.name,
+                        'album'     : song.music.album.name,
+                        'image'     : song.music.album.image_url,
+                        'artist'    : song.artist.name,
+                        'play_count': song.music.play_count}
+                    ballad_list.append(ballad)
+            ballad_list = sorted(ballad_list,key = lambda ballad : ballad['play_count'],reverse=True)
+            return JsonResponse({ 'data' : ballad_list }, status = 200)
+
+        except KeyError:
+            return JsonResponse({ 'message' : 'INVALID_KEYS' }, status = 400)
+
 
