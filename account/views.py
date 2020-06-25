@@ -80,5 +80,16 @@ class MyFavoriteMusicView(View):
         except KeyError:
             return JsonResponse({ 'message' : 'INVALID_KEYS' },status = 400)
 
-
+    @login_decorator
+    def delete(self,request,music_id):
+        try:
+            user = request.user
+            if MyFavoriteMusic.objects.filter( user = user, music_id = music_id).exists():
+                MyFavoriteMusic.objects.get( user = user, music_id = music_id).delete()
+                return HttpResponse( status = 200 )
+            
+            return JsonResponse({ 'message' : 'INVALID_VALUES' },status = 400)
+        
+        except KeyError:
+            return JsonResponse({ 'message' : 'INVALID_VALUES' },status = 400)
 
