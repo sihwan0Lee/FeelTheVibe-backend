@@ -37,7 +37,7 @@
 
 ## DATABASE ERD Modeling
 <br>
-![]image/vibe_image.png
+![](image/vibe_image.png)
 
 ## Features
 <br>
