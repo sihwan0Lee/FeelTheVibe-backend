@@ -39,9 +39,12 @@
 
 ![](image/vibe_image.png)
 
-## Features
 <br>
+
+## Features
+
 ### Account
+
 - Naver Social Log-in API으로 JWT토근을 생성하여 로그인 검증 및 유저 정보 저장
 - 로그인 검증을 위한 login decorator 구현
 - 내가 좋아요 한 노래 보관함 기능 구현
