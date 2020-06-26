@@ -10,7 +10,7 @@
 
  
  ## Demo
- 
+ [](https://youtu.be/HWpyll46m9A)
  <br>
  
  ## Goal 
@@ -35,7 +35,7 @@
 
 <br>
 
-## DATABASE ERD Modeling
+## Database ERD Modeling
 
 ![](image/vibe_image.png)
 
@@ -45,7 +45,7 @@
 
 ### Account
 
-- Naver Social Log-in API으로 JWT토근을 생성하여 로그인 검증 및 유저 정보 저장
+- Naver Social Log-in API으로 JWT 토근을 생성하여 로그인 검증 및 유저 정보 저장
 - 로그인 검증을 위한 login decorator 구현
 - 내가 좋아요 한 노래 보관함 기능 구현
 
